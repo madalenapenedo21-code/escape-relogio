@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<title>Ajusta o Relógio</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background:#f4f4f4;
+    text-align:center;
+    padding-top:20px;
+  }
+
+  .clock {
+    position: relative;
+    width: 260px;
+    height: 260px;
+    margin: 20px auto;
+    border: 8px solid #333;
+    border-radius: 50%;
+    background: white;
+    touch-action: none;
+  }
+
+  .number {
+    position: absolute;
+    font-weight: bold;
+    font-size: 16px;
+    transform: translate(-50%, -50%);
+  }
+
+  .hand {
+    position: absolute;
+    width: 50%;
+    height: 4px;
+    background: black;
+    top: 50%;
+    left: 50%;
+    transform-origin: left;
+  }
+
+  .hour { width: 35%; height: 6px; }
+  .minute { height: 4px; }
+  .second { height: 2px; background: red; }
+
+  button {
+    font-size: 18px;
+    padding: 10px 20px;
+    margin-top: 15px;
+  }
+
+  #mensagem {
+    margin-top: 15px;
+    font-size: 18px;
+  }
+
+  #ok {
+    display:none;
+    margin-top:20px;
+  }
+</style>
+</head>
+<body>
+
+<h2>🕒 Ajusta o relógio</h2>
+<p>Coloca-o na hora certa.</p>
+
+<div class="clock" id="clock">
+  <div class="hand hour" id="hour"></div>
+  <div class="hand minute" id="minute"></div>
+  <div class="hand second" id="second"></div>
+</div>
+
+<button onclick="verificar()">Submeter</button>
+
+<div id="mensagem"></div>
+<div id="ok">
+  <h3>✅ Correto</h3>
+  <p>Avança.</p>
+</div>
+
+<script>
+  const clock = document.getElementById("clock");
+
+  // === criar números ===
+  for(let i=1;i<=12;i++){
+    const n = document.createElement("div");
+    n.className = "number";
+    n.textContent = i;
+
+    const ang = (i/12)*2*Math.PI;
+    const r = 110;
+
+    n.style.left = 130 + r*Math.sin(ang) + "px";
+    n.style.top  = 130 - r*Math.cos(ang) + "px";
+
+    clock.appendChild(n);
+  }
+
+  // === hora alvo ===
+  const alvo = { h:0, m:58, s:53 };
+
+  const tolerancia = { h:1, m:2, s:3 };
+
+  let h=0, m=0, s=0;
+
+  function angulo(e) {
+    const r = clock.getBoundingClientRect();
+    const x = e.touches[0].clientX - (r.left + r.width/2);
+    const y = e.touches[0].clientY - (r.top + r.height/2);
+    return (Math.atan2(y,x)*180/Math.PI+450)%360;
+  }
+
+  function setHand(e, tipo) {
+    const d = angulo(e);
+    if(tipo==="hour") h = Math.round(d/30)%12;
+    if(tipo==="minute") m = Math.round(d/6)%60;
+    if(tipo==="second") s = Math.round(d/6)%60;
+    draw();
+  }
+
+  function draw() {
+    hour.style.transform = `rotate(${(h%12)*30 + m*0.5}deg)`;
+    minute.style.transform = `rotate(${m*6}deg)`;
+    second.style.transform = `rotate(${s*6}deg)`;
+  }
+
+  ["hour","minute","second"].forEach(t=>{
+    document.getElementById(t).addEventListener("touchmove",e=>{
+      e.preventDefault();
+      setHand(e,t);
+    },{passive:false});
+  });
+
+  function perto(a,b,t){ return Math.abs(a-b)<=t; }
+
+  function verificar() {
+    if (
+      perto(h,alvo.h,tolerancia.h) &&
+      perto(m,alvo.m,tolerancia.m) &&
+      perto(s,alvo.s,tolerancia.s)
+    ) {
+      mensagem.textContent="";
+      ok.style.display="block";
+    } else {
+      mensagem.textContent="❌ Ainda não está certo.";
+    }
+  }
+
+  draw();
+</script>
+
+</body>
+</html>
