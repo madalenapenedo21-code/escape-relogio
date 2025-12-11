@@ -2,92 +2,89 @@
 <html lang="pt">
 <head>
 <meta charset="UTF-8">
-<title>Escape Clock</title>
+<title>Que horas são?</title>
 <style>
-  body {
-    font-family: Arial, sans-serif;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin: 0;
-    padding-top: 40px;
-    background: #f2f2f2;
-  }
+    body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        font-family: sans-serif;
+        height: 100vh;
+        margin: 0;
+        background: #f7f7f7;
+    }
 
-  h2 {
-    font-size: 28px;
-    margin-bottom: 20px;
-  }
+    h1 {
+        font-size: 2rem;
+        margin-bottom: 20px;
+    }
 
-  #clockDisplay {
-    font-size: 64px;
-    font-weight: bold;
-    letter-spacing: 8px;
-    margin-bottom: 25px;
-  }
+    select {
+        font-size: 2rem;
+        padding: 10px;
+        margin: 10px;
+    }
 
-  input {
-    font-size: 32px;
-    text-align: center;
-    width: 200px;
-    padding: 10px;
-    border-radius: 10px;
-    border: 2px solid #333;
-    margin-bottom: 20px;
-  }
+    button {
+        margin-top: 20px;
+        font-size: 1.5rem;
+        padding: 15px 30px;
+    }
 
-  button {
-    font-size: 28px;
-    padding: 12px 30px;
-    border-radius: 10px;
-    border: none;
-    background: black;
-    color: white;
-  }
-
-  #resultado {
-    margin-top: 20px;
-    font-size: 28px;
-    font-weight: bold;
-  }
+    #resultado {
+        margin-top: 20px;
+        font-size: 1.8rem;
+        font-weight: bold;
+    }
 </style>
 </head>
-
 <body>
-<h2>Que horas são?</h2>
 
-<div id="clockDisplay">00:00</div>
+<h1>Que horas são?</h1>
 
-<input id="userTime" placeholder="HH:MM" maxlength="5">
+<div>
+    <select id="horas">
+        <!-- horas 00-23 -->
+        <option value="00">00</option>
+        <option value="01">01</option>
+        <option value="02">02</option>
+        <option value="03">03</option>
+        <option value="04">04</option>
+        <option value="05">05</option>
+        <option value="06">06</option>
+        <option value="07">07</option>
+        <option value="08">08</option>
+        <option value="09">09</option>
+        <option value="10">10</option>
+        <option value="11">11</option>
+        <option value="12">12</option>
+        <option value="13">13</option>
+        <option value="14">14</option>
+        <option value="15">15</option>
+        <option value="16">16</option>
+        <option value="17">17</option>
+        <option value="18">18</option>
+        <option value="19">19</option>
+        <option value="20">20</option>
+        <option value="21">21</option>
+        <option value="22">22</option>
+        <option value="23">23</option>
+    </select>
+
+    <select id="minutos">
+        <!-- minutos 00-59 -->
+        ${[...Array(60).keys()].map(n => 
+            `<option value="${String(n).padStart(2,'0')}">${String(n).padStart(2,'0')}</option>`
+        ).join('')}
+    </select>
+</div>
 
 <button onclick="checkTime()">Submeter</button>
 
 <div id="resultado"></div>
 
 <script>
-  // Relógio a andar sozinho (só visual)
-  function updateClock() {
-    let now = new Date();
-    let h = String(now.getHours()).padStart(2, '0');
-    let m = String(now.getMinutes()).padStart(2, '0');
-    document.getElementById("clockDisplay").textContent = `${h}:${m}`;
-  }
-  setInterval(updateClock, 1000);
-  updateClock();
-
-  function checkTime() {
-    const input = document.getElementById("userTime").value.trim();
-    const result = document.getElementById("resultado");
-
-    if (input === "00:58") {
-      result.textContent = "Correto! 🎉";
-      result.style.color = "green";
-    } else {
-      result.textContent = "Tenta outra vez.";
-      result.style.color = "red";
-    }
-  }
-</script>
-
-</body>
-</html>
+function checkTime() {
+    const h = document.getElementById("horas").value;
+    const m = document.getElementById("minutos"
