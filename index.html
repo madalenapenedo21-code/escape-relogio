@@ -2,78 +2,91 @@
 <html lang="pt">
 <head>
 <meta charset="UTF-8">
-<title>Que horas são?</title>
+<title>Escape Clock</title>
 <style>
   body {
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    font-family:sans-serif;
-    margin-top:40px;
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0;
+    padding-top: 40px;
+    background: #f2f2f2;
   }
-  .hora {
-    display:flex;
-    gap:10px;
-    margin-bottom:20px;
+
+  h2 {
+    font-size: 28px;
+    margin-bottom: 20px;
   }
-  select {
-    font-size:24px;
-    padding:10px;
+
+  #clockDisplay {
+    font-size: 64px;
+    font-weight: bold;
+    letter-spacing: 8px;
+    margin-bottom: 25px;
   }
+
+  input {
+    font-size: 32px;
+    text-align: center;
+    width: 200px;
+    padding: 10px;
+    border-radius: 10px;
+    border: 2px solid #333;
+    margin-bottom: 20px;
+  }
+
   button {
-    padding:12px 20px;
-    font-size:20px;
-    margin-top:10px;
+    font-size: 28px;
+    padding: 12px 30px;
+    border-radius: 10px;
+    border: none;
+    background: black;
+    color: white;
   }
+
   #resultado {
-    margin-top:20px;
-    font-size:22px;
-    font-weight:bold;
+    margin-top: 20px;
+    font-size: 28px;
+    font-weight: bold;
   }
 </style>
 </head>
-<body>
 
+<body>
 <h2>Que horas são?</h2>
 
-<div class="hora">
-  <select id="h"></select>
-  <span style="font-size:28px;">:</span>
-  <select id="m"></select>
-  <span style="font-size:28px;">:</span>
-  <select id="s"></select>
-</div>
+<div id="clockDisplay">00:00</div>
+
+<input id="userTime" placeholder="HH:MM" maxlength="5">
 
 <button onclick="checkTime()">Submeter</button>
+
 <div id="resultado"></div>
 
 <script>
-// Preencher selects
-for(let i=0;i<24;i++){
-  document.getElementById("h").innerHTML += `<option value="${i}">${String(i).padStart(2,'0')}</option>`;
-}
-for(let i=0;i<60;i++){
-  document.getElementById("m").innerHTML += `<option value="${i}">${String(i).padStart(2,'0')}</option>`;
-  document.getElementById("s").innerHTML += `<option value="${i}">${String(i).padStart(2,'0')}</option>`;
-}
-
-function checkTime(){
-  const h = parseInt(document.getElementById("h").value);
-  const m = parseInt(document.getElementById("m").value);
-  const s = parseInt(document.getElementById("s").value);
-
-  // A HORA CORRETA
-  const TH = 0;
-  const TM = 58;
-  const TS = 53;
-
-  // margem de erro opcional (aqui 0 para preciso)
-  if(h === TH && m === TM && s === TS){
-    document.getElementById("resultado").innerText = "Correto! 🎉";
-  } else {
-    document.getElementById("resultado").innerText = "Tenta outra vez.";
+  // Relógio a andar sozinho (só visual)
+  function updateClock() {
+    let now = new Date();
+    let h = String(now.getHours()).padStart(2, '0');
+    let m = String(now.getMinutes()).padStart(2, '0');
+    document.getElementById("clockDisplay").textContent = `${h}:${m}`;
   }
-}
+  setInterval(updateClock, 1000);
+  updateClock();
+
+  function checkTime() {
+    const input = document.getElementById("userTime").value.trim();
+    const result = document.getElementById("resultado");
+
+    if (input === "00:58") {
+      result.textContent = "Correto! 🎉";
+      result.style.color = "green";
+    } else {
+      result.textContent = "Tenta outra vez.";
+      result.style.color = "red";
+    }
+  }
 </script>
 
 </body>
