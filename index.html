@@ -52,7 +52,7 @@
 <body>
   <div class="card" role="main" aria-labelledby="qTitle">
     <h1 id="qTitle">Que horas são?</h1>
-    <p class="sub">Ajusta os menus e pressiona "Submeter".</p>
+   
 
     <div class="controls" aria-hidden="false">
       <label for="horaSelect" style="display:none">Hora</label>
@@ -96,7 +96,7 @@
     const h = horaEl.value;
     const mm = minEl.value;
     if(h === targetHour && mm === targetMin){
-      resultEl.textContent = 'Correto! 🎉';
+      resultEl.textContent = 'Boa!🎉 Time to take a break. Abre o envelope nº 2';
     } else {
       resultEl.textContent = 'Tenta outra vez.';
     }
